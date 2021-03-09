@@ -6,6 +6,4 @@ attr_accessor :name, :zone
     @name = name 
     @zone = zone
   end 
-
-
 end 
