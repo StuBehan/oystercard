@@ -2,12 +2,13 @@ class Oystercard
   DEFAULT_MAXIMUM = 90
   DEFAULT_MINIMUM = 1
 
-  attr_reader :balance, :default_maximum, :entry_station, :station_history
+  attr_reader :balance, :default_maximum, :entry_station, :station_history, :exit_station
 
   def initialize(balance = 0, default_maximum = DEFAULT_MAXIMUM)
     @balance = balance
     @default_maximum = default_maximum
     @entry_station = nil
+    @exit_station = nil
     @station_history = []
   end
 
@@ -25,12 +26,18 @@ class Oystercard
     @entry_station = station
   end
 
-  def touch_out
+  def touch_out(station)
     deduct(DEFAULT_MINIMUM)
+    @exit_station = station
+    @station_history << save_journey
     @entry_station = nil
   end
 
-  private 
+  private
+
+  def save_journey
+    { :entry_station => @entry_station, :exit_station => @exit_station }
+  end
   
   def in_journey?
     @entry_station != nil

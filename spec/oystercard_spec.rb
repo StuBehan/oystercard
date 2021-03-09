@@ -8,6 +8,10 @@ describe Oystercard do
     expect(subject.balance).to eq(0)
   end
 
+  it "station_history is empty on initialization" do 
+    expect(subject.station_history).to eq []
+  end
+
   describe 'top_up' do
     it "will add money to the balance of the card" do
       expect { subject.top_up 1 }.to change { subject.balance }.by 1
@@ -37,15 +41,19 @@ describe Oystercard do
 
     it "touches out a card and sets the journey to false" do
       test_card.touch_in(station)
-      expect { test_card.touch_out }.to change { test_card.entry_station }.to be nil
+      expect { test_card.touch_out(station) }.to change { test_card.entry_station }.to be nil
     end
 
     it "touching out deducts the minimum fare" do
-      expect { test_card.touch_out }.to change { test_card.balance }.by -Oystercard::DEFAULT_MINIMUM
+      expect { test_card.touch_out(station) }.to change { test_card.balance }.by -Oystercard::DEFAULT_MINIMUM
     end
 
     it "will return an error if the deducted amount exceeds the total remaining" do
-      expect { subject.touch_out }.to raise_error("The deducted amount exceeds the total remaining balance") 
+      expect { subject.touch_out(station) }.to raise_error("The deducted amount exceeds the total remaining balance") 
+    end
+
+    it "will take an arg of station and update the instance variable exit_station" do
+      expect { test_card.touch_out(station) }.to change { test_card.exit_station }.to be station
     end
   end
 
@@ -54,6 +62,15 @@ describe Oystercard do
       expect( test_card.touched_in_at(station) ).to eq station
     end
   end 
+
+  describe 'save_journey' do
+    let(:entry_station) { Station.new }
+    it "saves the journey details as a hash" do
+      test_card.touch_in(entry_station)
+      test_card.touch_out(station)
+      expect( test_card.station_history ).to include( { :entry_station => entry_station, :exit_station => station } )
+    end
+  end
 end
 
 # In order to use public transport
