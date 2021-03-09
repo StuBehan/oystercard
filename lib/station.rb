@@ -1,6 +1,6 @@
 class Station 
 
-attr_accessor :name, :zone 
+  attr_accessor :name, :zone 
 
   def intialize 
     @name = name 

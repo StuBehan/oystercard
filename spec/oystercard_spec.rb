@@ -41,7 +41,7 @@ describe Oystercard do
 
     it "touching out deducts the minimum fare" do
       test_card.touch_in(station)
-      expect { test_card.touch_out(station) }.to change { test_card.balance }.by -Oystercard::DEFAULT_MINIMUM
+      expect { test_card.touch_out(station) }.to change { test_card.balance }.by(-Oystercard::DEFAULT_MINIMUM)
     end
 
     it "will return an error if the deducted amount exceeds the total remaining" do
@@ -54,42 +54,14 @@ describe Oystercard do
     it "saves the journey details as a hash" do
       test_card.touch_in(entry_station)
       test_card.touch_out(station)
-      expect( test_card.station_history ).to include( { :entry_station => entry_station, :exit_station => station } )
+      expect(test_card.station_history).to include({ :entry_station => entry_station, :exit_station => station })
     end
   end
 
   describe 'fare' do 
     it { is_expected.to respond_to :fare }
     it 'returns a fine if journey is incomplete' do 
-      expect( test_card.fare ).to eq 6
+      expect(test_card.fare).to eq 6
     end 
   end 
 end
-
-# In order to use public transport
-# As a customer
-# I want money on my card
-
-# In order to keep using public transport
-# As a customer
-# I want to add money to my card
-
-# In order to protect my money from theft or loss
-# As a customer
-# I want a maximum limit (of £90) on my card
-
-# In order to pay for my journey
-# As a customer
-# I need my fare deducted from my card
-
-# In order to get through the barriers.
-# As a customer
-# I need to touch in and out.
-
-# In order to pay for my journey
-# As a customer
-# I need to have the minimum amount (£1) for a single journey.
-
-# In order to pay for my journey
-# As a customer
-# When my journey is complete, I need the correct amount deducted from my card

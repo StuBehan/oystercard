@@ -30,7 +30,7 @@ describe Journey do
   describe 'complete?' do 
     it { is_expected.to respond_to :complete? }
     it 'should return false if journey incomplete' do 
-      expect( journey.complete? ).to eq false
+      expect(journey.complete?).to eq false
     end 
   end 
-end 
+end

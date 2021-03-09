@@ -4,7 +4,8 @@ class Oystercard
   DEFAULT_MAXIMUM = 90
   DEFAULT_MINIMUM = 1
 
-  attr_reader :balance, :default_maximum, :entry_station, :station_history, :exit_station, :current_journey
+  attr_reader :balance, :default_maximum, :entry_station, :station_history, :exit_station, 
+              :current_journey
 
   def initialize(balance = 0, default_maximum = DEFAULT_MAXIMUM)
     @balance = balance
@@ -15,6 +16,7 @@ class Oystercard
 
   def top_up(money)
     fail "Top-up exceeds the predetermined maximum" if @balance + money > @default_maximum
+
     @balance += money
   end
 
@@ -40,7 +42,8 @@ class Oystercard
   end
 
   def deduct(money)
-    fail "The deducted amount exceeds the total remaining balance" if @balance - money < 0
+    fail "The deducted amount exceeds the total remaining balance" if (@balance - money).negative?
+
     @balance -= money
   end
 end
