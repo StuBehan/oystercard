@@ -28,7 +28,8 @@ describe Oystercard do
   describe 'touch_out' do
     before do
       # How can we isolate this unit test?
-      test_card.touch_in
+      # test_card.touch_in
+      test_card.instance_variable_set(:@journey, true)
     end
 
     it "touches out a card and sets the journey to false" do
