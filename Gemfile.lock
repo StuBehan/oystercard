@@ -37,8 +37,10 @@ GEM
     unicode-display_width (2.0.0)
 
 PLATFORMS
+  ruby
   x64-mingw32
   x86_64-darwin-19
+  x86_64-linux
 
 DEPENDENCIES
   rspec
