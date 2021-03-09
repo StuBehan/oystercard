@@ -1,7 +1,9 @@
 require 'oystercard'
+require 'station'
 
 describe Oystercard do
   let(:test_card) { Oystercard.new(20) }
+  let(:station) { Station.new }
   it "has a balance of zero" do
     expect(subject.balance).to eq(0)
   end
@@ -17,23 +19,25 @@ describe Oystercard do
 
   describe 'touch_in' do
     it 'touches in a card and sets journey to true' do
-      expect { test_card.touch_in }.to change { test_card.journey }.to be true
+      expect { test_card.touch_in(station) }.to change { test_card.entry_station }.to be station
     end
 
     it 'will return an error if the card has less than £1 balance' do
-      expect { subject.touch_in }.to raise_error("Not enough money to touch in")
+      expect { subject.touch_in(station) }.to raise_error("Not enough money to touch in")
     end
+
   end
 
   describe 'touch_out' do
     before do
       # How can we isolate this unit test?
       # test_card.touch_in
-      test_card.instance_variable_set(:@journey, true)
+      # test_card.instance_variable_set(:@in_jjourney, true)
     end
 
     it "touches out a card and sets the journey to false" do
-      expect { test_card.touch_out }.to change { test_card.journey }.to be false
+      test_card.touch_in(station)
+      expect { test_card.touch_out }.to change { test_card.entry_station }.to be nil
     end
 
     it "touching out deducts the minimum fare" do
@@ -44,6 +48,12 @@ describe Oystercard do
       expect { subject.touch_out }.to raise_error("The deducted amount exceeds the total remaining balance") 
     end
   end
+
+  describe 'touched_in_at' do
+    it 'should know the station we touched in at' do
+      expect( test_card.touched_in_at(station) ).to eq station
+    end
+  end 
 end
 
 # In order to use public transport
